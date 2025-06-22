@@ -15,6 +15,6 @@
 
 ## 📌 User Story Mapping
 
-![Превью карты](docs/User_story_mapping.pdf)  
+![Превью карты](./User_story_mapping.pdf)  
 Открыть в браузере 👉 [Посмотреть карту](https://alifemor.github.io/fashion-portfolio/)
 
