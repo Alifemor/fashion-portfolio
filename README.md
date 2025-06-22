@@ -19,7 +19,7 @@
 
 ## Документация
 
-- Backend: FastAPI + PostgreSQL
+- Цели Проекта (docs/business-goals.md)
 - Frontend: HTML-шаблон (Bootstrap)
 - API: REST + OpenAPI
 - Деплой: Docker / VPS
