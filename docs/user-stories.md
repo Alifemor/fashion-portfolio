@@ -15,4 +15,5 @@
 
 ## 📌 User Story Mapping
 
-Открыть в браузере 👉 [Посмотреть карту]([https://your-username.github.io/your-repo/](https://alifemor.github.io/fashion-portfolio/))
+Открыть в браузере 👉 [Посмотреть карту](https://your-username.github.io/your-repo/](https://alifemor.github.io/fashion-portfolio/)
+
