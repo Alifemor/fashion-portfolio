@@ -1,2 +1,21 @@
-# fashion-portfolio
-Web-based portfolio platform for showcasing fashion design models with public feedback and rating features.
+# Designer Portfolio Showcase
+
+Простой веб-проект для публикации моделей обуви, отзывов пользователей и сбора аналитики по интересу к дизайнам.
+
+## MVP-функции
+
+- Каталог моделей обуви (≈50)
+- Страница модели с фото, описанием и отзывами
+- Добавление оценки и комментария (без авторизации)
+- Простая антиспам-защита
+- Мини-аналитика: просмотры, рейтинги, активность
+
+## Технологии
+
+- Backend: FastAPI + PostgreSQL
+- Frontend: HTML-шаблон (Bootstrap)
+- API: REST + OpenAPI
+- Деплой: Docker / VPS
+
+## Статус
+- В разработке. Формируется документация MVP
