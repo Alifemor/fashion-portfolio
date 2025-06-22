@@ -17,5 +17,12 @@
 - API: REST + OpenAPI
 - Деплой: Docker / VPS
 
+## Документация
+
+- Backend: FastAPI + PostgreSQL
+- Frontend: HTML-шаблон (Bootstrap)
+- API: REST + OpenAPI
+- Деплой: Docker / VPS
+
 ## Статус
 - В разработке. Формируется документация MVP
