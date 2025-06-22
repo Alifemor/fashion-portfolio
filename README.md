@@ -17,10 +17,10 @@
 - API: REST + OpenAPI
 - Деплой: Docker / VPS
 
-## Документация
+## 📁Документация
 
-- [📄Цели Проекта](docs/business-goals.md)
-- Frontend: HTML-шаблон (Bootstrap)
+- [📄Цели и контекст проекта](docs/business-goals.md)
+- [👤Пользовательские сценарии](docs/business-goals.md)
 - API: REST + OpenAPI
 - Деплой: Docker / VPS
 
