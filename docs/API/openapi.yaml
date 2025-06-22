@@ -1,0 +1,252 @@
+openapi: 3.0.3
+info:
+  title: Designer Portfolio API
+  description: API для управления моделями обуви и отзывами
+  version: 1.0.0
+
+servers:
+  - url: https://future_domain.com/api 
+    description: адрес домена пока не присвоен
+
+tags:
+  - name: Models
+    description: Работа с модельным каталогом
+  - name: Reviews
+    description: Отзывы пользователей
+  - name: Admin
+    description: Управление (только по API-ключу)
+
+paths:
+  /models:
+    get:
+      summary: Получить список всех моделей
+      tags: [Models]
+      responses:
+        '200':
+          description: Список моделей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Model'
+    post:
+      summary: Добавить новую модель
+      tags: [Admin]
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        description: Данные новой модели
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelCreate'
+      responses:
+        '201':
+          description: Модель успешно добавлена
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /models/{id}:
+    get:
+      summary: Получить данные модели по ID
+      tags: [Models]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные модели
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Обновить модель
+      tags: [Admin]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelUpdate'
+      responses:
+        '200':
+          description: Модель обновлена
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    delete:
+      summary: Удалить модель
+      tags: [Admin]
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Модель удалена
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /models/{id}/reviews:
+    post:
+      summary: Оставить отзыв к модели
+      tags: [Reviews]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Данные отзыва
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreate'
+      responses:
+        '201':
+          description: Отзыв добавлен
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /reviews:
+    get:
+      summary: Получить все отзывы
+      tags: [Admin]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Список отзывов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  responses:
+    BadRequest:
+      description: Неверный запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Ресурс не найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    Model:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        photo_urls:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        avg_rating:
+          type: number
+        num_reviews:
+          type: integer
+
+    ModelCreate:
+      type: object
+      required: [name, description, photo_urls]
+      properties:
+        name:
+          type: string
+          description: Название модели
+        description:
+          type: string
+        photo_urls:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+
+    ModelUpdate:
+      allOf:
+        - $ref: '#/components/schemas/ModelCreate'
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+        shoe_model_id:
+          type: integer
+        name:
+          type: string
+        rating:
+          type: integer
+        comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    ReviewCreate:
+      type: object
+      required: [rating, comment]
+      properties:
+        name:
+          type: string
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: "Ошибка запроса"
