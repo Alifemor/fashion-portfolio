@@ -20,3 +20,7 @@
 
 - Все публичные эндпоинты доступны без авторизации.
 - Админ-доступ осуществляется через API-ключ в заголовке:
+
+
+- [![image](https://github.com/user-attachments/assets/e8c38c80-15a0-4178-962f-dd1a22f6e52f)
+ OpenAPI cпецификация](docs/API/openapi.yaml)
