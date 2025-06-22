@@ -19,7 +19,7 @@
 
 ## Документация
 
-- [📄Цели Проекта] (docs/business-goals.md)
+- ![📄Цели Проекта] (docs/business-goals.md)
 - Frontend: HTML-шаблон (Bootstrap)
 - API: REST + OpenAPI
 - Деплой: Docker / VPS
