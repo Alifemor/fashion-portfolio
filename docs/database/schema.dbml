@@ -1,0 +1,23 @@
+
+Table shoe_model {
+  id integer [primary key]
+  name string
+  description text
+  photo_urls array 
+  tags array 
+  created_at timestamp
+  avg_rating float
+  num_reviews integer
+}
+
+Table review {
+  id integer [primary key]
+  shoe_model_id integer
+  name string 
+  rating integer 
+  comment text
+  created_at	timestamp
+}
+
+Ref shoe_model: shoe_model.id < review.shoe_model_id // many-to-one
+
