@@ -1,9 +1,11 @@
-# backend/main.py
 from fastapi import FastAPI
+from backend.api import model_routes, review_routes
 
-app = FastAPI()
+app = FastAPI(
+    title="Designer Portfolio API",
+    version="1.0.0"
+)
 
-@app.get("/")
-def read_root():
-    return {"message": "Backend is working"}
-
+# Подключаем маршруты
+app.include_router(model_routes.router, tags=["Models"])
+app.include_router(review_routes.router, tags=["Reviews"])
