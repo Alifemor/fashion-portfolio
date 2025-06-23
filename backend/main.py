@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.api import model_routes, review_routes
+from api import model_routes, review_routes
 
 app = FastAPI(
     title="Designer Portfolio API",
@@ -9,3 +9,4 @@ app = FastAPI(
 # Подключаем маршруты
 app.include_router(model_routes.router, tags=["Models"])
 app.include_router(review_routes.router, tags=["Reviews"])
+
