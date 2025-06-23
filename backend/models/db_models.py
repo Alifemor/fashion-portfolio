@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKe
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from backend.models.base import Base  # Предположим, ты добавишь базовый класс позже
+from models.base import Base  # уже без backend
 
 class ShoeModel(Base):
     __tablename__ = "shoe_model"
