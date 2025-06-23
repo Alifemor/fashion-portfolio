@@ -1,12 +1,12 @@
+from fastapi import UploadFile
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import datetime
 
-class ShoeModelBase(BaseModel):
+class ShoeModelForm(BaseModel):
     name: str
     description: str
-    photo_urls: List[str]
-    tags: List[str]
+    tags: Optional[str] = None  
+    photos: Optional[List[UploadFile]] = None
 
 class ShoeModelCreate(ShoeModelBase):
     pass
