@@ -1,21 +1,25 @@
-from fastapi import UploadFile
+# schemas/model_schemas.py
+
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
 
-class ShoeModelForm(BaseModel):
+# ======= МОДЕЛИ ОБУВИ =======
+
+class ShoeModelBase(BaseModel):
     name: str
     description: str
-    tags: Optional[str] = None  
-    photos: Optional[List[UploadFile]] = None
+    tags: List[str]
 
 class ShoeModelCreate(ShoeModelBase):
-    pass
+    pass  # больше не ожидаем photo_urls
 
 class ShoeModelOut(ShoeModelBase):
     id: int
     created_at: datetime
     avg_rating: Optional[float]
     num_reviews: int
+    photo_urls: List[str]
 
     class Config:
         orm_mode = True
