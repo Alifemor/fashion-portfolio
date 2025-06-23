@@ -1,48 +1,46 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from sqlalchemy.orm import Session
-from uuid import uuid4
-import os
+# api/model_routes.py
 
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from sqlalchemy.orm import Session
+import os, uuid
 from backend import crud, schemas
 from backend.deps.deps import get_db
+from backend.core.config import settings
+import redis
 
 router = APIRouter()
+
+r = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
 
 MEDIA_DIR = "media"
 os.makedirs(MEDIA_DIR, exist_ok=True)
 
-@router.get("/models", response_model=list[schemas.ShoeModelOut])
-def list_models(db: Session = Depends(get_db)):
-    return crud.get_models(db)
-
-@router.get("/models/{model_id}", response_model=schemas.ShoeModelOut)
-def get_model(model_id: int, db: Session = Depends(get_db)):
-    model = crud.get_model(db, model_id)
-    if not model:
-        raise HTTPException(status_code=404, detail="Model not found")
-    return model
-
 @router.post("/models", response_model=schemas.ShoeModelOut)
-def create_model(
-    name: str = Depends(),
-    description: str = Depends(),
-    tags: str = Depends(),
-    files: list[UploadFile] = File(...),
+async def create_model(
+    name: str = Form(...),
+    description: str = Form(...),
+    tags: str = Form(...),  # передаём список тегов одной строкой через запятую
+    photos: list[UploadFile] = File(...),
     db: Session = Depends(get_db)
 ):
-    filenames = []
-    for file in files:
-        ext = os.path.splitext(file.filename)[1]
-        filename = f"{uuid4().hex}{ext}"
-        filepath = os.path.join(MEDIA_DIR, filename)
-        with open(filepath, "wb") as buffer:
-            buffer.write(file.file.read())
-        filenames.append(filepath)
+    saved_paths = []
 
-    model_in = schemas.ShoeModelCreate(
+    for photo in photos:
+        ext = os.path.splitext(photo.filename)[1]
+        filename = f"{uuid.uuid4().hex}{ext}"
+        file_path = os.path.join(MEDIA_DIR, filename)
+
+        with open(file_path, "wb") as buffer:
+            buffer.write(await photo.read())
+
+        redis_key = f"photo:{filename}"
+        r.set(redis_key, file_path)  # путь к файлу сохраняем в Redis
+        saved_paths.append(file_path)
+
+    model_data = schemas.ShoeModelCreate(
         name=name,
         description=description,
-        tags=tags.split(","),
-        photo_urls=filenames
+        tags=[t.strip() for t in tags.split(",")]
     )
-    return crud.create_model(db, model_in)
+
+    return crud.create_model(db, model_data, photo_urls=saved_paths)
