@@ -1,23 +1,37 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
+from typing import List, Optional
 
-from crud import crud
-from schemas import model_schemas as schemas
-from deps.deps import get_db
+from backend import crud
+from backend.deps.deps import get_db
 
 router = APIRouter()
 
-@router.get("/models", response_model=list[schemas.ShoeModelOut])
-def list_models(db: Session = Depends(get_db)):
-    return crud.get_models(db)
+@router.post("/models")
+async def create_model(
+    name: str = Form(...),
+    description: str = Form(...),
+    tags: Optional[str] = Form(None),
+    photos: Optional[List[UploadFile]] = File(None),
+    db: Session = Depends(get_db)
+):
+    # Обработка тегов
+    tag_list = [tag.strip() for tag in tags.split(",")] if tags else []
 
-@router.get("/models/{model_id}", response_model=schemas.ShoeModelOut)
-def get_model(model_id: int, db: Session = Depends(get_db)):
-    model = crud.get_model(db, model_id)
-    if not model:
-        raise HTTPException(status_code=404, detail="Model not found")
-    return model
+    # Обработка фото
+    photo_urls = []
+    if photos:
+        for photo in photos:
+            contents = await photo.read()
+            # сохранить в Redis и получить URL или ключ
+            # временные ссылки по имени файла
+            photo_urls.append(photo.filename)
 
-@router.post("/models", response_model=schemas.ShoeModelOut)
-def create_model(model: schemas.ShoeModelCreate, db: Session = Depends(get_db)):
-    return crud.create_model(db, model)
+    model_data = {
+        "name": name,
+        "description": description,
+        "tags": tag_list,
+        "photo_urls": photo_urls
+    }
+
+    return crud.create_model(db, model_data)
