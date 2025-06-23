@@ -1,7 +1,8 @@
 from fastapi import Depends, HTTPException, Header
 from sqlalchemy.orm import Session
-from backend.core.config import settings
-from backend.db.session import SessionLocal
+
+from core.config import settings
+from db.session import SessionLocal
 
 # Получение сессии БД
 def get_db():
