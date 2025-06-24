@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Python logs and dumps
+*.log
+*.pid
+*.sqlite3
+
+# Environment variables
+.env
+
+# VS Code and IDEs
+.vscode/
+.idea/
+
+# MyPy / Pylint / Coverage / pytest
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker
+*.tar
+*.bak
+docker-compose.override.yml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Uploaded media (user images, etc.)
+media/
+
+# Node.js (if used in frontend/static)
+node_modules/
+dist/
+build/
