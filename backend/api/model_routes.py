@@ -17,13 +17,14 @@ r = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
 MEDIA_DIR = "media"
 os.makedirs(MEDIA_DIR, exist_ok=True)
 
+
 @router.post("/models", response_model=schemas.ShoeModelOut)
 async def create_model(
     name: str = Form(...),
     description: str = Form(...),
     tags: str = Form(...),  # передаём список тегов одной строкой через запятую
     photos: list[UploadFile] = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     saved_paths = []
 
@@ -40,9 +41,12 @@ async def create_model(
         saved_paths.append(file_path)
 
     model_data = schemas.ShoeModelCreate(
-        name=name,
-        description=description,
-        tags=[t.strip() for t in tags.split(",")]
+        name=name, description=description, tags=[t.strip() for t in tags.split(",")]
     )
 
     return crud.create_model(db, model_data, photo_urls=saved_paths)
+
+
+@router.get("/models", response_model=list[model_schemas.ShoeModelOut])
+def list_models(db: Session = Depends(get_db)):
+    return crud.get_models(db)

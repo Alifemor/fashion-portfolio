@@ -10,8 +10,9 @@ import redis
 # Подключение к Redis
 r = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
 
+
 def create_model(db: Session, model: schemas.ShoeModelCreate, photo_urls: list[str]):
-    db_model = ShoeModel( 
+    db_model = ShoeModel(
         name=model.name,
         description=model.description,
         tags=model.tags,
@@ -22,3 +23,6 @@ def create_model(db: Session, model: schemas.ShoeModelCreate, photo_urls: list[s
     db.refresh(db_model)
     return db_model
 
+
+def get_models(db: Session):
+    return db.query(ShoeModel).all()
