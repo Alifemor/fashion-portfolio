@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from crud import crud
+from crud import operations as crud
 from schemas import review_schemas as schemas
 from deps.deps import get_db
 

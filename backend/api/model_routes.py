@@ -1,12 +1,14 @@
 # api/model_routes.py
-
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 import os, uuid
-from backend import crud, schemas
-from backend.deps.deps import get_db
-from backend.core.config import settings
+
+from crud import operations as crud
+from schemas import model_schemas as schemas
+from deps.deps import get_db
+from core.config import settings
 import redis
+
 
 router = APIRouter()
 
