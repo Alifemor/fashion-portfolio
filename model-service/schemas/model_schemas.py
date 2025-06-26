@@ -6,13 +6,16 @@ from datetime import datetime
 
 # ======= МОДЕЛИ ОБУВИ =======
 
+
 class ShoeModelBase(BaseModel):
     name: str
     description: str
     tags: List[str]
 
+
 class ShoeModelCreate(ShoeModelBase):
     pass  # больше не ожидаем photo_urls
+
 
 class ShoeModelOut(ShoeModelBase):
     id: int
@@ -22,4 +25,4 @@ class ShoeModelOut(ShoeModelBase):
     photo_urls: List[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

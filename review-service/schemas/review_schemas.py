@@ -8,7 +8,7 @@ class ReviewBase(BaseModel):
     comment: Optional[str] = None
 
 class ReviewCreate(ReviewBase):
-    pass
+    shoe_model_id: int
 
 class ReviewOut(ReviewBase):
     id: int

@@ -8,18 +8,6 @@ from deps.deps import get_db
 
 router = APIRouter()
 
-
-@router.post("/models/{model_id}/reviews", response_model=review_schemas.ReviewOut)
-def create_review(
-    model_id: int, review: review_schemas.ReviewCreate, db: Session = Depends(get_db)
-):
-    return crud.create_review(db, model_id, review)
-
-
-@router.get("/models/{model_id}/reviews", response_model=list[review_schemas.ReviewOut])
-def get_reviews(model_id: int, db: Session = Depends(get_db)):
-    return crud.get_reviews(db, model_id)
-
 @router.get("/reviews", response_model=list[review_schemas.ReviewOut])
 def read_all_reviews(db: Session = Depends(get_db)):
     return crud.get_all_reviews(db)
