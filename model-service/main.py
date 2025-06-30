@@ -10,4 +10,3 @@ os.makedirs("media", exist_ok=True)
 
 # Подключаем маршруты
 app.include_router(model_routes.router, tags=["Models"])
-

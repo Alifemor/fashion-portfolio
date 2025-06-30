@@ -8,10 +8,10 @@ from deps.deps import get_db
 
 router = APIRouter()
 
+
 @router.get("/reviews", response_model=list[review_schemas.ReviewOut])
 def read_all_reviews(db: Session = Depends(get_db)):
     return crud.get_all_reviews(db)
-
 
 
 @router.put(
@@ -40,6 +40,7 @@ def update_review(
     db.refresh(db_review)
     return db_review
 
+
 @router.patch("/reviews/{review_id}", response_model=review_schemas.ReviewOut)
 def update_review_partial(
     review_id: int,
@@ -54,14 +55,15 @@ def update_review_partial(
         raise HTTPException(status_code=404, detail="Review not found")
     return review
 
+
 @router.delete("/reviews/{review_id}", status_code=204)
 def delete_review(
     review_id: int,
     db: Session = Depends(get_db),
-    x_api_key: str = Header(..., alias="x-api-key")
+    x_api_key: str = Header(..., alias="x-api-key"),
 ):
     if x_api_key != settings.API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
-    
+
     crud.delete_review(db, review_id)
     return Response(status_code=204)
