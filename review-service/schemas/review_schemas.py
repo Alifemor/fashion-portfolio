@@ -10,7 +10,13 @@ class ReviewBase(BaseModel):
 
 
 class ReviewCreate(ReviewBase):
-    shoe_model_id: int
+    pass
+
+
+class ReviewUpdate(BaseModel):
+    name: Optional[str] = None
+    rating: Optional[int] = Field(None, ge=1, le=5)
+    comment: Optional[str] = None
 
 
 class ReviewOut(ReviewBase):
@@ -19,10 +25,4 @@ class ReviewOut(ReviewBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
-
-
-class ReviewUpdate(BaseModel):
-    name: Optional[str] = None
-    rating: Optional[int] = Field(None, ge=1, le=5)
-    comment: Optional[str] = None
+        from_attributes = True
