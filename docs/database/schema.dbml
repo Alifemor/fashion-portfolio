@@ -1,23 +1,40 @@
+Table users {
+  id uuid [primary key]
+  login varchar [unique, not null]
+  password_hash varchar [not null]
+  display_name varchar [not null]
+  role varchar [not null] // user, admin
+  failed_login_attempts int [default: 0]
+  last_failed_login timestamp
+}
+
+Table user_logs {
+  id int [primary key, increment]
+  user_id uuid
+  action varchar // login, logout, failed_login
+  timestamp timestamp
+  ip varchar
+}
 
 Table shoe_model {
-  id integer [primary key]
-  name string
+  id int [primary key, increment]
+  name varchar [not null]
   description text
-  photo_urls array 
-  tags array 
+  photo_urls varchar[]
+  tags varchar[]
   created_at timestamp
   avg_rating float
-  num_reviews integer
+  num_reviews int
 }
 
 Table review {
-  id integer [primary key]
-  shoe_model_id integer
-  name string 
-  rating integer 
+  id int [primary key, increment]
+  shoe_model_id int [not null, ref: > shoe_model.id]
+  name varchar [not null]
+  rating int [not null]
   comment text
-  created_at	timestamp
+  created_at timestamp
 }
 
-Ref shoe_model: shoe_model.id < review.shoe_model_id // many-to-one
+Ref: review.shoe_model_id > shoe_model.id
 

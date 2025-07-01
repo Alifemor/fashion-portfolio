@@ -11,7 +11,7 @@
 
 ## Запуск
 
-1. Убедитесь, что в корне проекта есть файл `.env` для user-service (или используйте дефолтные значения из примера).
+1. Скопируйте `.env.example` в `.env` и заполните переменные.
 2. Запустите проект через docker-compose:
 
 ```bash
@@ -25,21 +25,20 @@ docker-compose up --build
 Для создания таблиц выполните:
 
 ```bash
-docker-compose exec user-service python db/init_db.py
+docker-compose exec user-service python -m db.init_db
 ```
 
 ## Документация API
 
 Swagger: http://localhost:8002/docs
 
-## Пример .env
-
+## Пример .env.example
 ```
-POSTGRES_USER=user_user
-POSTGRES_PASSWORD=user_password
-POSTGRES_DB=user_db
+POSTGRES_USER=your_user
+POSTGRES_PASSWORD=your_password
+POSTGRES_DB=your_db
 POSTGRES_HOST=user-db
 POSTGRES_PORT=5432
-JWT_SECRET=supersecretkey
+JWT_SECRET=your_jwt_secret
 JWT_ALGORITHM=HS256
 ``` 
