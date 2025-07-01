@@ -5,3 +5,6 @@ psycopg2-binary
 python-dotenv
 redis
 pydantic-settings
+requests
+python-jose[cryptography]
+pydantic

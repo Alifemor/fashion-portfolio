@@ -84,3 +84,15 @@ def get_me(current_user: User = Depends(get_current_user)):
 @router.get("/logs", response_model=List[UserLogOut])
 def get_logs(db: Session = Depends(get_db), user: User = Depends(require_admin)):
     return db.query(UserLog).order_by(UserLog.timestamp.desc()).all()
+
+
+@router.get("/health", tags=["Health"])
+def health():
+    return {"status": "ok"}
+
+
+@router.get("/stats", tags=["Stats"])
+def stats(db: Session = Depends(get_db)):
+    total = db.query(User).count()
+    admins = db.query(User).filter(User.role == UserRole.admin).count()
+    return {"users": total, "admins": admins}

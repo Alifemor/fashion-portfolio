@@ -6,6 +6,8 @@ from schemas import review_schemas
 from deps.deps import get_db
 from uuid import UUID
 from shared.jwt_auth import get_current_user, TokenData
+from models.db_models import Review
+from sqlalchemy import func
 
 
 # Заглушка для get_current_user (реализовать через shared или прямой импорт)
@@ -85,3 +87,15 @@ def delete_review(
         raise HTTPException(status_code=403, detail="Нет прав на удаление")
     crud.delete_review(db, review_id)
     return Response(status_code=204)
+
+
+@router.get("/health", tags=["Health"])
+def health():
+    return {"status": "ok"}
+
+
+@router.get("/stats", tags=["Stats"])
+def stats(db: Session = Depends(get_db)):
+    total = db.query(Review).count()
+    avg_rating = db.query(func.avg(Review.rating)).scalar() or 0
+    return {"reviews": total, "avg_rating": round(avg_rating, 2)}

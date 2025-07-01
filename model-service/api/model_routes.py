@@ -8,6 +8,7 @@ from schemas import model_schemas as schemas
 from deps.deps import get_db, verify_api_key
 from core.config import settings
 import redis
+from models.db_models import ShoeModel
 
 
 router = APIRouter()
@@ -92,3 +93,14 @@ def update_model(
     db.commit()
     db.refresh(db_model)
     return db_model
+
+
+@router.get("/health", tags=["Health"])
+def health():
+    return {"status": "ok"}
+
+
+@router.get("/stats", tags=["Stats"])
+def stats(db: Session = Depends(get_db)):
+    total = db.query(ShoeModel).count()
+    return {"models": total}
