@@ -5,6 +5,7 @@ from crud import operations as crud
 from schemas import review_schemas
 from deps.deps import get_db
 from uuid import UUID
+from shared.jwt_auth import get_current_user, TokenData
 
 
 # Заглушка для get_current_user (реализовать через shared или прямой импорт)
@@ -36,9 +37,9 @@ def create_review(
     model_id: int,
     review: review_schemas.ReviewCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: TokenData = Depends(get_current_user),
 ):
-    return crud.create_review(db, model_id, review, user_id=current_user.id)
+    return crud.create_review(db, model_id, review, user_id=current_user.sub)
 
 
 @router.put("/reviews/{review_id}", response_model=review_schemas.ReviewOut)
@@ -46,12 +47,12 @@ def update_review(
     review_id: int,
     updated_review: review_schemas.ReviewCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: TokenData = Depends(get_current_user),
 ):
     db_review = crud.get_review(db, review_id)
     if not db_review:
         raise HTTPException(status_code=404, detail="Review not found")
-    if db_review.user_id != current_user.id and current_user.role != "admin":
+    if str(db_review.user_id) != current_user.sub and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Нет прав на редактирование")
     return crud.update_review(db, review_id, updated_review)
 
@@ -61,12 +62,12 @@ def update_review_partial(
     review_id: int,
     review_data: review_schemas.ReviewUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: TokenData = Depends(get_current_user),
 ):
     db_review = crud.get_review(db, review_id)
     if not db_review:
         raise HTTPException(status_code=404, detail="Review not found")
-    if db_review.user_id != current_user.id and current_user.role != "admin":
+    if str(db_review.user_id) != current_user.sub and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Нет прав на редактирование")
     return crud.update_review_partial(db, review_id, review_data)
 
@@ -75,12 +76,12 @@ def update_review_partial(
 def delete_review(
     review_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: TokenData = Depends(get_current_user),
 ):
     db_review = crud.get_review(db, review_id)
     if not db_review:
         raise HTTPException(status_code=404, detail="Review not found")
-    if db_review.user_id != current_user.id and current_user.role != "admin":
+    if str(db_review.user_id) != current_user.sub and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Нет прав на удаление")
     crud.delete_review(db, review_id)
     return Response(status_code=204)
