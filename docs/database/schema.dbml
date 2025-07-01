@@ -30,7 +30,7 @@ Table shoe_model {
 Table review {
   id int [primary key, increment]
   shoe_model_id int [not null, ref: > shoe_model.id]
-  name varchar [not null]
+  user_id uuid [not null]
   rating int [not null]
   comment text
   created_at timestamp

@@ -7,9 +7,15 @@ from fastapi import HTTPException
 
 
 r = redis.Redis.from_url(settings.redis_url, decode_responses=True)
-                  
-def create_review(db: Session, model_id: int, review: schemas.ReviewCreate):
-    db_review = Review(**review.dict(), shoe_model_id=model_id)
+
+
+def create_review(db: Session, model_id: int, review: schemas.ReviewCreate, user_id):
+    db_review = Review(
+        shoe_model_id=model_id,
+        user_id=user_id,
+        rating=review.rating,
+        comment=review.comment,
+    )
     db.add(db_review)
     db.commit()
     db.refresh(db_review)
@@ -28,21 +34,12 @@ def get_review(db: Session, review_id: int):
     return db.query(Review).filter(Review.id == review_id).first()
 
 
-def update_review(
-    db: Session, model_id: int, review_id: int, updated_review: schemas.ReviewCreate
-):
-    review = (
-        db.query(Review)
-        .filter(Review.id == review_id, Review.shoe_model_id == model_id)
-        .first()
-    )
+def update_review(db: Session, review_id: int, updated_review: schemas.ReviewCreate):
+    review = db.query(Review).filter(Review.id == review_id).first()
     if not review:
         return None
-
-    review.name = updated_review.name
     review.rating = updated_review.rating
     review.comment = updated_review.comment
-
     db.commit()
     db.refresh(review)
     return review
@@ -54,10 +51,8 @@ def update_review_partial(
     db_review = db.query(Review).filter(Review.id == review_id).first()
     if not db_review:
         return None
-
     for field, value in review_data.model_dump(exclude_unset=True).items():
         setattr(db_review, field, value)
-
     db.commit()
     db.refresh(db_review)
     return db_review
