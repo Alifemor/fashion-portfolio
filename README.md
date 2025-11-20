@@ -1,8 +1,8 @@
-# 👠 Designer Portfolio Showcase
+#  Designer Portfolio Showcase
 
 Микросервисный веб-проект для публикации моделей обуви, отзывов пользователей и сбора аналитики по интересу к дизайнам.
 
-## 🏗️ Архитектура
+##  Архитектура
 
 Проект состоит из следующих микросервисов:
 
@@ -13,7 +13,7 @@
 
 Подробнее: [docs/architecture.md](docs/architecture.md)
 
-## 🚀 Запуск
+##  Запуск
 
 1. Скопируйте `.env.example` в `.env` для каждого сервиса и заполните переменные.
 2. Запустите проект:
@@ -25,13 +25,13 @@
    docker-compose exec user-service python -m db.init_db
    ```
 
-## 📚 Документация сервисов
+##  Документация сервисов
 
 - [User Service README](user-service/README.md) | [Swagger](http://localhost:8002/docs)
 - [Model Service README](model-service/README.md) | [Swagger](http://localhost:8000/docs)
 - [Review Service README](review-service/README.md) | [Swagger](http://localhost:8001/docs)
 
-## 🗂️ Полезные ссылки
+##  Полезные ссылки
 
 - [Цели и контекст проекта](docs/business-goals.md)
 - [Пользовательские сценарии](docs/User_Story/user-stories.md)
@@ -39,11 +39,11 @@
 - [API-маршруты и структура](docs/API/API_README.md)
 - [Архитектура проекта](docs/architecture.md)
 
-## 🏷️ Статус
+##  Статус
 
 - В разработке. Ведётся разработка фронтенда.
 
-## 🧪 Тесты
+##  Тесты
 
 В каждом микросервисе есть папка `tests/` с базовыми тестами (pytest + FastAPI TestClient).
 
@@ -60,7 +60,7 @@
 
 Тесты позволяют убедиться, что основные сценарии работают корректно и сервисы готовы к интеграции с фронтендом.
 
-## 📊 Минимальная отчётность и мониторинг
+##  Минимальная отчётность и мониторинг
 
 В каждом сервисе реализованы специальные эндпоинты:
 
@@ -76,7 +76,7 @@ curl http://localhost:8002/health
 curl http://localhost:8002/stats
 ```
 
-## 🚀 Примеры запросов для фронтенда
+##  Примеры запросов для фронтенда
 
 ### Регистрация пользователя
 POST /register
@@ -114,7 +114,7 @@ POST /models/{model_id}/reviews
 }
 ```
 
-## 🖥️ Интеграция с фронтендом
+## Интеграция с фронтендом
 
 ### Генерация клиента из OpenAPI
 
